@@ -1,0 +1,31 @@
+This project is very much WIP
+
+It is intended to be a site/app/whatever to allow me to better manage
+and automate EC2 instances, images, keys, etc.  Currently it handles a
+good bit of the actual instance logic - spinning up servers from a given
+AMI, with an access key either specified or (by default) newly created.
+And it fully ties in the aws-ec2 sdk classes, so you can have full 
+control over every aspect of the Instance, Image, and KeyPair instances.
+It can also run SSH commands against those Instances, and there is a 
+BuildScript model with a `run` method that will run an arbitrary length 
+script against a model and continuously print its output.  Of course, 
+it does not accept any input.  It seems to work fully, though, given 
+the right script input.
+
+It also generally manages to auto-detect an Ubuntu AMI, which opens up
+the option to copy the authorized_keys file from /home/ubuntu to /root.
+If you've ever used an official Ubuntu EC2 image, you know why.
+
+What it does not do (yet):
+
+* Have any controllers or views.
+* Have a method to find an AMI that isn't already in the database.
+* Anything useful, really, outside of irb.  Even that is spurious.
+
+What it does do:
+
+    instance=Ec2Ami.find('whatever').run_server
+    # wait for it to come up, otherwise you'll get an exception
+    BuildScript.find('whatever').run(instance)
+    instance.key_pair.save('/home/you/my_new_key.pem')
+    File.open('/home/you/ssh_connect.sh','wb').write("ssh root@#{instance.dns_name} -i /home/you/my_new_key.pem')
