@@ -26,6 +26,9 @@ What it does do:
 
     instance=Ec2Ami.find('whatever').run_server
     # wait for it to come up, otherwise you'll get an exception
+    instance.fix_username!
+    #It's got a bang on it because it'll make a change to the model
+    #But it should be safe to run, even on non-Ubuntu machines.
     BuildScript.find('whatever').run(instance)
     instance.key_pair.save('/home/you/my_new_key.pem')
     File.open('/home/you/ssh_connect.sh','wb').write("ssh root@#{instance.dns_name} -i /home/you/my_new_key.pem')
