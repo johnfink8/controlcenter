@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(:version => 20120225204411) do
     t.string   "name"
     t.string   "amiID"
   end
-
+  add_index "ec2_amis", ["amiID"], :name => "index_ec2_amis_on_amiID"
 
   create_table "ec2_instances", :force => true do |t|
     t.string   "name"

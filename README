@@ -19,12 +19,11 @@ If you've ever used an official Ubuntu EC2 image, you know why.
 What it does not do (yet):
 
 * Have any controllers or views.
-* Have a method to find an AMI that isn't already in the database.
 * Anything useful, really, outside of irb.  Even that is spurious.
 
 What it does do:
 
-    instance=Ec2Ami.find('whatever').run_server
+    instance=Ec2Ami.find('ami-some_aws_id').run_server
     # wait for it to come up, otherwise you'll get an exception
     instance.fix_username!
     #It's got a bang on it because it'll make a change to the model

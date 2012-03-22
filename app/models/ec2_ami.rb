@@ -17,4 +17,17 @@ class Ec2Ami < ActiveRecord::Base
         :key_pair_id => key.id,
         :username => username)
     end
+    
+    def self.find(target)
+      begin
+        super(target)
+      rescue
+        ami=Ec2Ami.where('amiID=?',target)[0]
+        return ami unless ami.nil?
+        ec2=AWS::EC2.new
+        ami=ec2.images[target]
+        Ec2Ami.create!(:name => ami.location, :amiID => ami.id)
+      end
+    end
+    
 end
