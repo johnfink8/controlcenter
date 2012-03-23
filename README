@@ -20,6 +20,7 @@ What it does not do (yet):
 
 * Have any controllers or views.
 * Anything useful, really, outside of irb.  Even that is spurious.
+* Support multiple AWS accounts
 
 What it does do:
 
@@ -29,5 +30,5 @@ What it does do:
     #It's got a bang on it because it'll make a change to the model
     #But it should be safe to run, even on non-Ubuntu machines.
     BuildScript.find('whatever').run(instance)
-    instance.key_pair.save('/home/you/my_new_key.pem')
-    File.open('/home/you/ssh_connect.sh','wb').write("ssh root@#{instance.dns_name} -i /home/you/my_new_key.pem')
+    instance.key_pair.save_file('/home/you/my_new_key.pem')
+    File.open('/home/you/ssh_connect.sh','wb') {|f| f.write("ssh root@#{instance.dns_name} -i /home/you/my_new_key.pem")}

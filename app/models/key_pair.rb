@@ -16,7 +16,7 @@ class KeyPair < ActiveRecord::Base
   end
   
   def save_file(path)
-    File.open(path,'wb').write(private_key)
+    File.open(path,'wb') {|f| f.write(private_key)}
   end
   
 end
