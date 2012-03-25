@@ -1,0 +1,46 @@
+apt-get update && apt-get upgrade -y
+ 
+debconf-set-selections <<< 'mysql-server-5.1 mysql-server/root_password password mysqlpass'
+debconf-set-selections <<< 'mysql-server-5.1 mysql-server/root_password_again password mysqlpass'
+apt-get install build-essential python-dev memcached sendmail \
+python-mysqldb python-imaging python-memcache python-boto \
+python-paramiko nginx mysql-server mysql-client p7zip-full \
+mercurial python-setuptools python-pip python-html5lib \
+python-reportlab imagemagick -y
+ 
+/etc/init.d/nginx stop
+ 
+pip install django
+pip install sentry
+pip install django-dbtemplates
+ 
+apt-get build-dep nginx -y
+ 
+apt-get install ruby1.8 ruby1.8-dev rubygems libopenssl-ruby1.8 libcurl4-openssl-dev -y 
+ 
+mkdir -p /tmp/src
+ 
+gem install passenger --version '=3.0.11' --no-ri --no-rdoc
+ 
+cd /tmp/src && wget http://cteklinuxbuilds.s3.amazonaws.com/echo-nginx-module-v0.34rc2.tgz \
+&& tar xzvf echo-nginx-module-v0.34rc2.tgz && rm echo-nginx-module-v0.34rc2.tgz
+cd /tmp/src && wget http://cteklinuxbuilds.s3.amazonaws.com/nginx_mod_sub.tar.gz && \
+tar xzvf nginx_mod_sub.tar.gz && rm nginx_mod_sub.tar.gz
+cd /tmp/src && wget http://cteklinuxbuilds.s3.amazonaws.com/nginx_upload_module-2.0.12.tar.gz && \
+tar xzvf nginx_upload_module-2.0.12.tar.gz && rm nginx_upload_module-2.0.12.tar.gz
+cd /tmp/src && wget http://nginx.org/download/nginx-1.0.12.tar.gz && \
+tar xzvf nginx-1.0.12.tar.gz && rm nginx-1.0.12.tar.gz
+ 
+passenger-install-nginx-module --nginx-source-dir=/tmp/src/nginx-1.0.12 \
+--extra-configure-flags='--with-http_perl_module --with-http_ssl_module \
+--with-http_flv_module --with-http_sub_module --prefix=/etc/nginx/ \
+--sbin-path=/usr/sbin/nginx --http-log-path=/var/log/nginx/access.log \
+--error-log-path=/var/log/nginx/error.log --conf-path=/etc/nginx/nginx.conf \
+--add-module=/tmp/src/agentzh-echo-nginx-module-29d5e9c \
+--add-module=/tmp/src/nginx_upload_module-2.0.12' --auto --prefix=/usr
+ 
+cat /etc/nginx/nginx.conf | awk '/^http/ { getline; printf("http {\
+\n    passenger_root  /var/lib/gems/1.8/gems/passenger-3.0.11;\
+\n    passenger_ruby /usr/bin/ruby;\n    passenger_default_user  www-data;\
+\n")} {print}' > /etc/nginx/nginx.conf.repl
+cp /etc/nginx/nginx.conf.repl /etc/nginx/nginx.conf

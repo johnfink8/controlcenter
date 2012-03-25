@@ -15,3 +15,5 @@
 /tmp
 /config/config.yml
 /config/database.yml
+/Gemfile.lock
+/log
