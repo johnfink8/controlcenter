@@ -20,7 +20,6 @@ What it does not do (yet):
 
 * Have any controllers or views.
 * Anything useful, really, outside of irb.  Even that is spurious.
-* Support multiple AWS accounts
 
 What it does do:
 

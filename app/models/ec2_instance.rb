@@ -1,14 +1,14 @@
 class Ec2Instance < ActiveRecord::Base
   belongs_to :ec2_ami
   belongs_to :key_pair
-  
+  belongs_to :aws_account
   after_initialize :initialize_ec2
+
   
   include Ec2Mixin
       
   def initialize_ec2
-    super
-    @obj=@ec2.instances[self.instanceid]
+    @obj=aws_account.instances[self.instanceid]
   end
   
   

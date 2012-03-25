@@ -42,3 +42,4 @@ gem 'therubyracer', :require => "v8"
 gem 'aws-sdk'
 gem 'net-ssh'
 gem 'uuid'
+gem 'devise'

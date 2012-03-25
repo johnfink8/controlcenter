@@ -1,7 +1,5 @@
 module Ec2Mixin
-  def initialize_ec2
-    @ec2=AWS::EC2.new
-  end
+  
 
   def method_missing(method_name, *args, &block)
     begin
